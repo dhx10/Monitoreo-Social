@@ -259,6 +259,54 @@ ANCLAS_INVIOLABLES_MINVU = [
     r'\burbanismo social\b'
 ]
 
+
+MARCADORES_EXCLUSION_ARGENTINA = [
+    r'\bargentina\b', r'\bargentino(?:s)?\b', r'\bargentina(?:s)?\b',
+    r'\bbuenos aires\b', r'\bcaba\b', r'\bconurbano\b', r'\blaplata\b', r'\bla plata\b',
+    r'\bmendoza\b', r'\bc[óo]rdoba\b', r'\brosario\b', r'\bsanta fe\b', r'\bsalta\b',
+    r'\btucum[áa]n\b', r'\bjujuy\b', r'\bneuqu[ée]n\b', r'\bbariloche\b', r'\bchubut\b',
+    r'\br[íi]o gallegos\b', r'\bushuaia\b', r'\bmar del plata\b', r'\bbah[íi]a blanca\b',
+    r'\bquilmes\b', r'\bavellaneda\b', r'\blan[úu]s\b', r'\bmor[óo]n\b', r'\bla matanza\b',
+    r'\bcorrientes\b', r'\bentre r[íi]os\b', r'\bchaco\b', r'\bformosa\b', r'\bmisiones\b',
+    r'\bla pampa\b', r'\bsan juan\b', r'\bsan luis\b', r'\bla rioja\b', r'\bcatamarca\b',
+    r'\bsantiago del estero\b', r'\bmilei\b', r'\bjavier milei\b', r'\bkicillof\b',
+    r'\baxel kicillof\b', r'\bvillarruel\b', r'\bcasa rosada\b', r'\banses\b', r'\bafip\b',
+    r'\barca\b', r'\bindec\b', r'\bd[óo]lar blue\b', r'\bpesos argentinos\b'
+]
+
+TOPONIMOS_COMPARTIDOS = {
+    "santa cruz": [r'\bcolchagua\b', r"\bo'higgins\b", r'\bchile\b', r'\bvalle de colchagua\b', r'\bserviu\b', r'\bminvu\b'],
+    "río negro": [r'\bosorno\b', r'\blos lagos\b', r'\bchile\b', r'\bpurranque\b', r'\bserviu\b', r'\bminvu\b'],
+    "rio negro": [r'\bosorno\b', r'\blos lagos\b', r'\bchile\b', r'\bpurranque\b', r'\bserviu\b', r'\bminvu\b'],
+    "san rafael": [r'\bmaule\b', r'\btalca\b', r'\bchile\b', r'\bserviu\b', r'\bminvu\b'],
+    "san pedro": [r'\bmelipilla\b', r'\bmetropolitana\b', r'\bchile\b', r'\bserviu\b', r'\bminvu\b', r'\bsan pedro de la paz\b', r'\bbiob[íi]o\b'],
+    "los andes": [r'\bvalpara[íi]so\b', r'\baconcagua\b', r'\bsan felipe\b', r'\bchile\b', r'\bserviu\b', r'\bminvu\b']
+}
+
+DOMINIOS_ARGENTINOS = [
+    ".ar", "clarin.com", "lanacion.com.ar", "infobae.com", "pagina12.com.ar",
+    "perfil.com", "cronista.com", "ambito.com", "losandes.com.ar", "rionegro.com.ar",
+    "lmneuquen.com", "diarioelzonda.com.ar", "cadena3.com", "lacapital.com.ar"
+]
+
+ACTORES_PERMITIDOS_MINVU = {
+    "Iván Poduje (Ministro MINVU)", "Natalia Aguilar (Subsecretaria MINVU)", "Rodrigo Uribe (SERVIU)",
+    "DITEC MINVU", "División de Desarrollo Urbano (DDU)", "División de Política Habitacional (DPH)",
+    "Parquemet (Parque Metropolitano)", "MINVU (Central)", "Subsecretaría de Vivienda", "SEREMI MINVU",
+    "SERVIU", "SERVIU Metropolitano", "SERVIU Valparaíso", "SERVIU Biobío", "SERVIU Araucanía",
+    "SERVIU Antofagasta", "SERVIU Tarapacá", "SERVIU Atacama", "SERVIU Coquimbo", "SERVIU O'Higgins",
+    "SERVIU Maule", "SERVIU Ñuble", "SERVIU Los Ríos", "SERVIU Los Lagos", "SERVIU Aysén",
+    "SERVIU Magallanes", "SERVIU Arica y Parinacota", "CChC (Cámara Chilena de la Construcción)",
+    "TECHO-Chile", "Fundación Déficit Cero", "Movimiento Ukamau", "Comités de Vivienda",
+    "Comités de Allegados", "ANDHA Chile", "José Antonio Kast (Presidente)", "Gabriel Boric",
+    "Carlos Montes (Ex Ministro MINVU)", "Gabriela Elgueta (Ex Subsecretaria MINVU)", "Tatiana Rojas (Ex Subsecretaria MINVU)",
+    "Fidel Espinoza (Senador)", "Comisión de Vivienda (Congreso)", "Ministerio de Bienes Nacionales",
+    "Claudio Orrego (Gobernador RM)", "Tomás Vodanovic (Alcalde Maipú)", "Macarena Ripamonti (Alcaldesa Viña del Mar)",
+    "Camila Nieto (Alcaldesa Valparaíso)", "Mario Desbordes (Alcalde Santiago)", "Evelyn Matthei",
+    "Daniel Andrade (Caso Convenios)", "Carlos Contreras (Ex Seremi)", "Democracia Viva", "ProCultura",
+    "Urbanismo Social", "Contraloría General", "Fiscalía Nacional", "Consejo de Defensa del Estado (CDE)", "SENAPRED"
+}
+
 PAISES_EXTRANJEROS_RECHAZO = [
     "españa", "espana", "méxico", "mexico", "colombia", "argentina", "perú", "peru",
     "bolivia", "venezuela", "brasil", "ee.uu.", "estados unidos", "madrid", "barcelona",
@@ -271,12 +319,64 @@ SECCIONES_RECHAZO = [
     "/deportes/", "/futbol/", "/espectaculos/", "/entretenimiento/", "/tendencias/"
 ]
 
+MAPEO_REGIONES_COMPLETO = {
+    "Arica y Parinacota": ["arica", "parinacota", "putre", "general lagos", "camarones", "valle de azapa", "serviu arica", "seremi arica"],
+    "Tarapacá": ["iquique", "alto hospicio", "tarapacá", "tarapaca", "pozo almonte", "pica", "huara", "camiña", "colchane", "alto molle", "el boro", "la pampa", "serviu tarapacá", "serviu tarapaca", "seremi tarapacá"],
+    "Antofagasta": ["antofagasta", "calama", "tocopilla", "mejillones", "taltal", "san pedro de atacama", "baquedano", "sierra gorda", "los arenales", "la chimba", "maria elena", "maría elena", "serviu antofagasta", "seremi antofagasta"],
+    "Atacama": ["copiapó", "copiapo", "vallenar", "caldera", "chañaral", "chanaral", "atacama", "huasco", "tierra amarilla", "diego de almagro", "alto andacollo", "freirina", "alto del carmen", "serviu atacama", "seremi atacama"],
+    "Coquimbo": ["la serena", "coquimbo", "ovalle", "illapel", "salamanca", "limarí", "limari", "choapa", "elqui", "vicuña", "vicuna", "combarbalá", "combarbala", "monte patria", "los vilos", "andacollo", "paihuano", "canela", "punitaqui", "serviu coquimbo", "seremi coquimbo"],
+    "Valparaíso": ["valparaíso", "valparaiso", "viña del mar", "vina del mar", "concon", "concón", "quilpué", "quilpue", "villa alemana", "san antonio", "quillota", "los andes", "san felipe", "kandinsky", "euromarina", "el olivar", "campamento manuel bustos", "reñaca", "renaca", "limache", "la calera", "la ligua", "quintero", "puchuncaví", "puchuncavi", "cartagena", "el quisco", "el tabo", "algarrobo", "santo domingo", "casablanca", "llay llay", "llayllay", "rinconada", "calle larga", "san esteban", "putaendo", "santa maría", "santa maria", "catemu", "panquehue", "nogales", "hijuelas", "olmué", "olmue", "cabildo", "petorca", "zapallar", "papudo", "juan fernández", "isla de pascua", "rapa nui", "serviu valparaíso", "serviu valparaiso", "seremi valparaíso"],
+    "Metropolitana": ["santiago", "maipú", "maipu", "puente alto", "la florida", "san bernardo", "cerrillos", "estación central", "estacion central", "pudahuel", "quilicura", "colina", "lampa", "nuevo amanecer", "toma dignidad", "parquemet", "providencia", "las condes", "lo espejo", "la pintana", "recoleta", "independencia", "ñuñoa", "nunoa", "peñalolén", "penalolen", "macul", "san joaquín", "san joaquin", "la granja", "san ramón", "san ramon", "la cisterna", "el bosque", "pedro aguirre cerda", "lo prado", "cerro navia", "quinta normal", "renca", "conchalí", "conchali", "huechuraba", "vitacura", "lo barnechea", "san josé de maipo", "san jose de maipo", "pirque", "buin", "paine", "calera de tango", "talagante", "peñaflor", "penaflor", "isla de maipo", "el monte", "padre hurtado", "melipilla", "curacaví", "curacavi", "maría pinto", "maria pinto", "san pedro", "alhué", "alhue", "tiltil", "til til", "serviu metropolitano", "seremi metropolitana"],
+    "O'Higgins": ["rancagua", "machalí", "machali", "san fernando", "rengo", "pichilemu", "o'higgins", "ohiggins", "cachapoal", "colchagua", "cardenal caro", "graneros", "mostazal", "santa cruz", "chimbarongo", "san vicente", "peumo", "las cabras", "pichidegua", "requínoa", "requinoa", "olivar", "doñihue", "donihue", "coinco", "coltauco", "malloa", "quinta de tilcoco", "chépica", "chepica", "lolol", "nancagua", "palmilla", "peralillo", "placilla", "pumanque", "la estrella", "litueche", "marchigüe", "marchigue", "navidad", "paredones", "serviu o'higgins", "seremi o'higgins"],
+    "Maule": ["talca", "curicó", "curico", "linares", "cauquenes", "constitución", "constitucion", "maule", "parral", "san javier", "molina", "san clemente", "longaví", "longavi", "teno", "rauco", "romeral", "sagrada familia", "hualañé", "hualane", "licantén", "licanten", "vichuquén", "vichuquen", "curepto", "pelarco", "pencahue", "río claro", "rio claro", "san rafael", "colbún", "colbun", "villa alegre", "yerbas buenas", "chanco", "pelluhue", "serviu maule", "seremi maule"],
+    "Ñuble": ["chillán", "chillan", "chillán viejo", "chillan viejo", "san carlos", "ñuble", "nuble", "diguillín", "diguillin", "itata", "punilla", "coelemu", "quirihue", "bulnes", "yungay", "el carmen", "pemuco", "pinto", "quillón", "quillon", "san ignacio", "cobquecura", "ninhue", "portezuelo", "ránquil", "ranquil", "treguaco", "coihueco", "ñiquén", "niquen", "san fabián", "san fabian", "san nicolás", "san nicolas", "serviu ñuble", "seremi ñuble"],
+    "Biobío": ["concepción", "concepcion", "talcahuano", "coronel", "lota", "san pedro de la paz", "chiguayante", "los ángeles", "los angeles", "biobío", "biobio", "hualpén", "hualpen", "penco", "tomé", "tome", "lebu", "arauco", "cañete", "canete", "curanilahue", "los alamos", "los álamos", "tirúa", "tirua", "contulmo", "mulchén", "mulchen", "nacimiento", "negrete", "quilaco", "quilleco", "san rosendo", "santa bárbara", "santa barbara", "tucapel", "yumbel", "alto biobío", "alto biobio", "cabrero", "laja", "hualqui", "florida", "santa juana", "serviu biobío", "serviu biobio", "seremi biobío"],
+    "La Araucanía": ["temuco", "padre las casas", "villarrica", "pucón", "pucon", "angol", "araucanía", "araucania", "cautín", "cautin", "malleco", "victoria", "lautaro", "nueva imperial", "carahue", "cunco", "curarrehue", "freire", "galvarino", "gorbea", "lanco", "lonquimay", "los sauces", "lumaco", "melipeuco", "perquenco", "pitrufquén", "pitrufquen", "puren", "purén", "renaico", "saavedra", "teodoro schmidt", "toltén", "tolten", "traiguén", "traiguen", "vilcún", "vilcun", "cholchol", "serviu araucanía", "serviu araucania", "seremi araucanía"],
+    "Los Ríos": ["valdivia", "la unión", "la union", "panguipulli", "los ríos", "los rios", "ranco", "río bueno", "rio bueno", "paillaco", "mariquina", "san josé de la mariquina", "lanco", "futrono", "lago ranco", "corral", "máfil", "mafil", "serviu los ríos", "serviu los rios", "seremi los ríos"],
+    "Los Lagos": ["puerto montt", "puerto varas", "osorno", "castro", "ancud", "chiloé", "chiloe", "los lagos", "llanquihue", "palena", "frutillar", "calbuco", "quellón", "quellon", "fresia", "los muermos", "maullín", "maullin", "cochamó", "cochamo", "purranque", "puyehue", "río negro", "rio negro", "san juan de la costa", "san pablo", "chaitén", "chaiten", "futaleufú", "futaleufu", "hualaihué", "hualaihue", "chonchi", "curaco de vélez", "dalcahue", "puqueldón", "queilén", "quemchi", "quinchao", "serviu los lagos", "seremi los lagos"],
+    "Aysén": ["coyhaique", "puerto aysén", "puerto aysen", "aysén", "aysen", "cochrane", "chile chico", "puerto cisnes", "río ibáñez", "rio ibanez", "tortel", "o'higgins", "villa o'higgins", "guaitecas", "melinka", "lago verde", "serviu aysén", "serviu aysen", "seremi aysén"],
+    "Magallanes": ["punta arenas", "puerto natales", "magallanes", "tierra del fuego", "porvenir", "cabo de hornos", "antártica", "antartica", "puerto williams", "torres del paine", "primavera", "timaukel", "san gregorio", "río verde", "rio verde", "laguna blanca", "serviu magallanes", "seremi magallanes"]
+}
+
+def detectar_region_por_contenido_app(texto_eval, region_existente=""):
+    t_low = (texto_eval or "").lower()
+    puntajes = {reg: 0 for reg in MAPEO_REGIONES_COMPLETO}
+
+    for reg, terminos in MAPEO_REGIONES_COMPLETO.items():
+        for term in terminos:
+            pat = r'\b' + re.escape(term) + r'\b'
+            c = len(re.findall(pat, t_low))
+            if c > 0:
+                puntajes[reg] += c
+
+    mejor_reg = max(puntajes, key=puntajes.get)
+    if puntajes[mejor_reg] > 0:
+        return mejor_reg
+
+    if region_existente and region_existente in MAPEO_REGIONES_COMPLETO:
+        return region_existente
+
+    return "Nacional"
+
 def es_noticia_estricta_minvu(titulo, bajada, cuerpo, url=""):
-    t_full = f"{titulo or ''} {bajada or ''} {(cuerpo or '')[:800]}".lower()
+    t_full = f"{titulo or ''} {bajada or ''} {(cuerpo or '')[:1200]}".lower()
     u_low = (url or "").lower()
 
-    if any(sec in u_low for sec in SECCIONES_RECHAZO):
+    # 1. Descarte por dominio argentino o sección foránea
+    if any(dom in u_low for dom in DOMINIOS_ARGENTINOS) or any(sec in u_low for sec in SECCIONES_RECHAZO):
         return False
+
+    # 2. Descarte por indicadores explícitos de Argentina
+    for pat_arg in MARCADORES_EXCLUSION_ARGENTINA:
+        if re.search(pat_arg, t_full):
+            if not any(k in t_full for k in ["minvu", "serviu", "poduje", "gobierno de chile"]):
+                return False
+
+    # 3. Desambiguación de topónimos compartidos (Río Negro, Santa Cruz, etc.)
+    for topo, contexto_chile in TOPONIMOS_COMPARTIDOS.items():
+        if re.search(r'\b' + re.escape(topo) + r'\b', t_full):
+            if not any(re.search(pat, t_full) for pat in contexto_chile):
+                return False
 
     for p in PAISES_EXTRANJEROS_RECHAZO:
         if re.search(r'\b' + re.escape(p) + r'\b', t_full):
@@ -414,6 +514,52 @@ def formatear_hipervinculo_limpio(medio, url, cluster=""):
 def cargar_datos():
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
+    
+    # Auto-crear tablas si la base de datos es nueva
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS articulos (
+            id TEXT PRIMARY KEY,
+            medio TEXT NOT NULL,
+            url TEXT UNIQUE NOT NULL,
+            titulo TEXT NOT NULL,
+            bajada TEXT,
+            cuerpo TEXT,
+            autor TEXT,
+            fecha_publicacion TEXT,
+            fecha_captura TEXT NOT NULL,
+            seccion TEXT,
+            eje_tematico TEXT,
+            tipo_fuente TEXT,
+            cluster_editorial TEXT,
+            region TEXT,
+            sentimiento TEXT,
+            polaridad_score REAL,
+            driver_emocional TEXT,
+            es_minvu INTEGER DEFAULT 0
+        )
+    """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS entidades (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            articulo_id TEXT NOT NULL,
+            entidad TEXT NOT NULL,
+            tipo TEXT NOT NULL,
+            medio TEXT NOT NULL,
+            fecha TEXT
+        )
+    """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS citas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            articulo_id TEXT NOT NULL,
+            cita TEXT NOT NULL,
+            medio TEXT NOT NULL,
+            eje_tematico TEXT,
+            fecha TEXT
+        )
+    """)
+    conn.commit()
+
     cursor.execute("PRAGMA table_info(articulos)")
     cols = [col[1] for col in cursor.fetchall()]
     
@@ -450,13 +596,21 @@ def cargar_datos():
         
     conn.close()
 
-    # BARRERA DEFENSIVA SECUNDARIA: Asegurar 100% pureza MINVU y Chile
+    # BARRERA DEFENSIVA SECUNDARIA: Asegurar 100% pureza MINVU y Chile con Georreferenciación por Contenido
     if not df_art.empty:
         df_art["es_estricto_valido"] = df_art.apply(
             lambda r: es_noticia_estricta_minvu(r['titulo'], r['bajada'], r['cuerpo'], r['url']),
             axis=1
         )
         df_art = df_art[df_art["es_estricto_valido"] == True]
+
+        # EL CONTENIDO MANDA: Corregir en vivo la región según el texto real de la noticia
+        regiones_corregidas = []
+        for _, row in df_art.iterrows():
+            texto_geo = f"{row['titulo'] or ''} {row['titulo'] or ''} {row['bajada'] or ''} {(row['cuerpo'] or '')[:1000]}"
+            reg_real = detectar_region_por_contenido_app(texto_geo, row.get('region', 'Nacional'))
+            regiones_corregidas.append(reg_real)
+        df_art["region"] = regiones_corregidas
 
         # GARANTÍA DE SENTIMIENTO CONECTADO EN VIVO
         sentimientos_calculados = []
@@ -477,6 +631,9 @@ def cargar_datos():
     # Sincronizar entidades y citas con los artículos válidos
     ids_validos = set(df_art["id"].tolist()) if not df_art.empty else set()
     df_ent = df_ent[df_ent["articulo_id"].isin(ids_validos)]
+    # CERROJO ABSOLUTO DE ACTORES: Erradicación de celebridades y medios
+    if not df_ent.empty:
+        df_ent = df_ent[df_ent["entidad"].isin(ACTORES_PERMITIDOS_MINVU)]
     if not df_cit.empty:
         df_cit = df_cit[df_cit["articulo_id"].isin(ids_validos)]
 

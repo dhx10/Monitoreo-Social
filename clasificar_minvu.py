@@ -73,6 +73,39 @@ PAISES_EXTRANJEROS_RECHAZO = [
     "paraguay", "uruguay", "francia", "alemania", "italia", "ucrania", "rusia", "china"
 ]
 
+
+# ==============================================================================
+# FILTRO BLINDADO ANTI-ARGENTINA Y DESAMBIGUACIÓN DE HOMÓNIMOS
+# ==============================================================================
+MARCADORES_EXCLUSION_ARGENTINA = [
+    r'\bargentina\b', r'\bargentino(?:s)?\b', r'\bargentina(?:s)?\b',
+    r'\bbuenos aires\b', r'\bcaba\b', r'\bconurbano\b', r'\blaplata\b', r'\bla plata\b',
+    r'\bmendoza\b', r'\bc[óo]rdoba\b', r'\brosario\b', r'\bsanta fe\b', r'\bsalta\b',
+    r'\btucum[áa]n\b', r'\bjujuy\b', r'\bneuqu[ée]n\b', r'\bbariloche\b', r'\bchubut\b',
+    r'\br[íi]o gallegos\b', r'\bushuaia\b', r'\bmar del plata\b', r'\bbah[íi]a blanca\b',
+    r'\bquilmes\b', r'\bavellaneda\b', r'\blan[úu]s\b', r'\bmor[óo]n\b', r'\bla matanza\b',
+    r'\bcorrientes\b', r'\bentre r[íi]os\b', r'\bchaco\b', r'\bformosa\b', r'\bmisiones\b',
+    r'\bla pampa\b', r'\bsan juan\b', r'\bsan luis\b', r'\bla rioja\b', r'\bcatamarca\b',
+    r'\bsantiago del estero\b', r'\bmilei\b', r'\bjavier milei\b', r'\bkicillof\b',
+    r'\baxel kicillof\b', r'\bvillarruel\b', r'\bcasa rosada\b', r'\banses\b', r'\bafip\b',
+    r'\barca\b', r'\bindec\b', r'\bd[óo]lar blue\b', r'\bpesos argentinos\b'
+]
+
+TOPONIMOS_COMPARTIDOS = {
+    "santa cruz": [r'\bcolchagua\b', r"\bo\'higgins\b", r'\bchile\b', r'\bvalle de colchagua\b', r'\bserviu\b', r'\bminvu\b'],
+    "río negro": [r'\bosorno\b', r'\blos lagos\b', r'\bchile\b', r'\bpurranque\b', r'\bserviu\b', r'\bminvu\b'],
+    "rio negro": [r'\bosorno\b', r'\blos lagos\b', r'\bchile\b', r'\bpurranque\b', r'\bserviu\b', r'\bminvu\b'],
+    "san rafael": [r'\bmaule\b', r'\btalca\b', r'\bchile\b', r'\bserviu\b', r'\bminvu\b'],
+    "san pedro": [r'\bmelipilla\b', r'\bmetropolitana\b', r'\bchile\b', r'\bserviu\b', r'\bminvu\b', r'\bsan pedro de la paz\b', r'\bbiob[íi]o\b'],
+    "los andes": [r'\bvalpara[íi]so\b', r'\baconcagua\b', r'\bsan felipe\b', r'\bchile\b', r'\bserviu\b', r'\bminvu\b']
+}
+
+DOMINIOS_ARGENTINOS = [
+    ".ar", "clarin.com", "lanacion.com.ar", "infobae.com", "pagina12.com.ar",
+    "perfil.com", "cronista.com", "ambito.com", "losandes.com.ar", "rionegro.com.ar",
+    "lmneuquen.com", "diarioelzonda.com.ar", "cadena3.com", "lacapital.com.ar"
+]
+
 SECCIONES_RECHAZO = [
     "/internacional/", "/mundo/", "/global/", "/exterior/",
     "/deportes/", "/futbol/", "/espectaculos/", "/entretenimiento/", "/tendencias/", "/estilodevida/"
@@ -250,19 +283,52 @@ def clasificar_driver_emocional(texto):
     return "Institucional / Técnico"
 
 def detectar_region_exhaustiva(texto_eval, region_existente=""):
-    if region_existente and region_existente not in ["Nacional", "Sin Anclaje", "Internacional", ""]:
-        return region_existente
+    """
+    EL CONTENIDO MANDA (Georreferenciación Inviolable):
+    Analiza el texto de la noticia buscando comunas, capitales, provincias y SERVIUs.
+    Solo si el texto NO contiene ningún anclaje regional, se recurre a la región del medio.
+    """
     t_low = (texto_eval or "").lower()
-    for reg, comunas in MAPEO_REGIONES_COMPLETO.items():
-        for c in comunas:
-            if re.search(r'\b' + re.escape(c) + r'\b', t_low):
-                return reg
+    puntajes = {reg: 0 for reg in MAPEO_REGIONES_COMPLETO}
+
+    for reg, terminos in MAPEO_REGIONES_COMPLETO.items():
+        for term in terminos:
+            pat = r'\b' + re.escape(term) + r'\b'
+            c = len(re.findall(pat, t_low))
+            if c > 0:
+                puntajes[reg] += c
+
+    mejor_reg = max(puntajes, key=puntajes.get)
+    if puntajes[mejor_reg] > 0:
+        return mejor_reg
+
+    # Fallback: solo si el texto es genérico o institucional sin comuna específica
+    if region_existente and region_existente in MAPEO_REGIONES_COMPLETO:
+        return region_existente
+
     return "Nacional"
 
 def validar_filtro_estricto_chile_minvu(titulo, bajada, cuerpo, url="", seccion=""):
-    t_full = f"{titulo or ''} {bajada or ''} {(cuerpo or '')[:800]}".lower()
+    t_full = f"{titulo or ''} {bajada or ''} {(cuerpo or '')[:1200]}".lower()
     u_low = (url or "").lower()
     s_low = (seccion or "").lower()
+
+    # 0. Descarte inmediato por dominios o medios argentinos
+    if any(dom in u_low for dom in DOMINIOS_ARGENTINOS):
+        return False, "Rechazo: Dominio argentino"
+
+    # 0.1 Descarte por indicadores de Argentina
+    for pat_arg in MARCADORES_EXCLUSION_ARGENTINA:
+        if re.search(pat_arg, t_full):
+            if not any(k in t_full for k in ["minvu", "serviu", "poduje", "gobierno de chile"]):
+                return False, f"Rechazo: Contexto argentino ({pat_arg})"
+
+    # 0.2 Desambiguación de topónimos compartidos (Río Negro, Santa Cruz, San Rafael, etc.)
+    for topo, contexto_chile in TOPONIMOS_COMPARTIDOS.items():
+        if re.search(r'\b' + re.escape(topo) + r'\b', t_full):
+            tiene_anclaje_chile = any(re.search(pat, t_full) for pat in contexto_chile)
+            if not tiene_anclaje_chile:
+                return False, f"Rechazo: Topónimo homónimo '{topo}' sin contexto chileno" 
 
     # 1. Descarte inmediato por sección internacional o deportes
     if any(sec in u_low for sec in SECCIONES_RECHAZO) or any(sec in s_low for sec in SECCIONES_RECHAZO):
@@ -287,7 +353,8 @@ def clasificar_minvu(titulo, bajada, cuerpo, url="", seccion="", reg_existente="
     Retorna (eje_asignado, es_minvu, region_inferida).
     """
     pasa_filtro, motivo = validar_filtro_estricto_chile_minvu(titulo, bajada, cuerpo, url, seccion)
-    region_det = detectar_region_exhaustiva(f"{titulo} {bajada} {cuerpo}", reg_existente)
+    texto_geo = f"{titulo or ''} {titulo or ''} {bajada or ''} {(cuerpo or '')[:1000]}"
+    region_det = detectar_region_exhaustiva(texto_geo, reg_existente)
 
     if not pasa_filtro:
         return "📰 Pauta General (Excluida)", 0, region_det
