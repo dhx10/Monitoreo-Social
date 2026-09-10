@@ -1,0 +1,36 @@
+name: Actualizador Continuo Monitor MINVU (Cada 15 Minutos)
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'  # Ejecución automática cada 15 minutos (24/7)
+  workflow_dispatch:        # Permite ejecutarlo manualmente con un clic
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Instalar dependencias del pipeline
+        run: |
+          pip install --upgrade pip
+          pip install feedparser trafilatura spacy requests pandas plotly
+          python -m spacy download es_core_news_sm
+
+      - name: Ejecutar actualización completa (Ingesta, Filtro Estricto y Sentimiento)
+        run: |
+          python actualizar_minvu.py
+
+      - name: Guardar base de datos actualizada en el repositorio
+        run: |
+          git config --global user.name "MINVU Monitor Bot"
+          git config --global user.email "bot@monitor-minvu.cl"
+          git add monitor_minvu.db
+          git commit -m "Auto-update: Ingesta cada 15 min [$(date -u +'%Y-%m-%d %H:%M:%S UTC')]" || echo "Sin cambios nuevos"
+          git push
