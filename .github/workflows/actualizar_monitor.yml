@@ -2,9 +2,13 @@ name: Actualizador Continuo Monitor MINVU (Cada 15 Minutos)
 
 on:
   schedule:
-    # Minutos desfasados (7, 22, 37, 52) para evitar la congestión global de GitHub
+    # Minutos desfasados (7, 22, 37, 52) para evitar congestión de servidores
     - cron: '7,22,37,52 * * * *'
   workflow_dispatch:
+
+# PERMISOS EXPLÍCITOS DE ESCRITURA (DESBLOQUEA EL GUARDADO EN GITHUB)
+permissions:
+  contents: write
 
 jobs:
   actualizar:
@@ -12,6 +16,9 @@ jobs:
     steps:
       - name: Checkout del repositorio
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
 
       - name: Configurar Python 3.10
         uses: actions/setup-python@v5
@@ -28,11 +35,12 @@ jobs:
         run: |
           python actualizar_minvu.py
 
-      - name: Registrar marca de tiempo y guardar cambios
+      - name: Registrar marca de tiempo y guardar cambios en GitHub
         run: |
-          git config --global user.name "MINVU Monitor Bot"
-          git config --global user.email "bot@monitor-minvu.cl"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           date -u +"%Y-%m-%d %H:%M:%S UTC" > ultima_ejecucion.txt
+          git pull origin ${{ github.ref_name }} --rebase || true
           git add monitor_minvu.db ultima_ejecucion.txt
-          git commit -m "Auto-update: [$(date -u +'%Y-%m-%d %H:%M:%S UTC')]" || echo "Sin cambios nuevos"
-          git push
+          git commit -m "Auto-update: Ingesta 15 min [$(date -u +'%Y-%m-%d %H:%M:%S UTC')]" || echo "Sin cambios nuevos"
+          git push origin HEAD:${{ github.ref_name }} || git push origin main || git push
