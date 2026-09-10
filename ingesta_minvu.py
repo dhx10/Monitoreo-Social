@@ -2,7 +2,6 @@ import sqlite3
 import hashlib
 from datetime import datetime
 import feedparser
-import trafilatura
 import requests
 import re
 import time
@@ -311,19 +310,10 @@ def procesar_feeds():
             if bajada:
                 bajada = re.sub(r'<[^>]+>', ' ', bajada).strip()
 
-            cuerpo = ""
+            cuerpo = bajada
             es_video = "youtube.com" in url or "youtu.be" in url or "Video" in medio
             if es_video:
                 cuerpo = limpiar_texto_video(entry.get("summary", ""))
-            else:
-                try:
-                    descarga = trafilatura.fetch_url(url)
-                    if descarga:
-                        extraido = trafilatura.extract(descarga, include_comments=False)
-                        if extraido:
-                            cuerpo = extraido.strip()
-                except Exception:
-                    cuerpo = bajada
 
             fecha_pub = entry.get("published", "") or entry.get("updated", "") or ahora
             autor = entry.get("author", "Redacción")
