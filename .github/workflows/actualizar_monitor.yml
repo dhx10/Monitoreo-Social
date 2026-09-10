@@ -2,8 +2,9 @@ name: Actualizador Continuo Monitor MINVU (Cada 15 Minutos)
 
 on:
   schedule:
-    - cron: '*/15 * * * *'  # Ejecución automática cada 15 minutos (24/7)
-  workflow_dispatch:        # Permite ejecutarlo manualmente con un clic
+    # Minutos desfasados (7, 22, 37, 52) para evitar la congestión global de GitHub
+    - cron: '7,22,37,52 * * * *'
+  workflow_dispatch:
 
 jobs:
   actualizar:
@@ -27,10 +28,11 @@ jobs:
         run: |
           python actualizar_minvu.py
 
-      - name: Guardar base de datos actualizada en el repositorio
+      - name: Registrar marca de tiempo y guardar cambios
         run: |
           git config --global user.name "MINVU Monitor Bot"
           git config --global user.email "bot@monitor-minvu.cl"
-          git add monitor_minvu.db
-          git commit -m "Auto-update: Ingesta cada 15 min [$(date -u +'%Y-%m-%d %H:%M:%S UTC')]" || echo "Sin cambios nuevos"
+          date -u +"%Y-%m-%d %H:%M:%S UTC" > ultima_ejecucion.txt
+          git add monitor_minvu.db ultima_ejecucion.txt
+          git commit -m "Auto-update: [$(date -u +'%Y-%m-%d %H:%M:%S UTC')]" || echo "Sin cambios nuevos"
           git push
