@@ -210,54 +210,118 @@ COORDENADAS_REGIONES = {
 # ==============================================================================
 # 4. CERROJO DEFENSIVO: ANCLAS INVIOLABLES DE VIVIENDA Y EXCLUSIÓN FORÁNEA
 # ==============================================================================
-ANCLAS_INVIOLABLES_MINVU = [
-    r'\bminvu\b',
-    r'\bministerio de vivienda\b',
-    r'\bsubsecretar[íi]a de vivienda\b',
-    r'\biv[áa]n poduje\b',
-    r'\bministro poduje\b',
-    r'\bpoduje\b',
-    r'\bnatalia aguilar\b',
-    r'\bsubsecretaria aguilar\b',
-    r'\bseremi (?:de )?vivienda\b',
-    r'\bseremis (?:de )?vivienda\b',
-    r'\bseremi minvu\b',
-    r'\bserviu\b',
-    r'\bservius\b',
-    r'\bparquemet\b',
-    r'\bparque metropolitano de santiago\b',
-    r'\bds49\b', r'\bds 49\b',
-    r'\bds19\b', r'\bds 19\b',
-    r'\bds1\b', r'\bds 1\b',
-    r'\bds52\b', r'\bds 52\b',
-    r'\bds10\b', r'\bds 10\b',
-    r'\bds27\b', r'\bds 27\b',
-    r'\bsubsidio habitacional\b',
-    r'\bsubsidios habitacionales\b',
-    r'\bsubsidio de vivienda\b',
-    r'\bsubsidios de vivienda\b',
-    r'\bplan (?:de )?emergencia habitacional\b',
-    r'\bd[ée]ficit habitacional\b',
-    r'\bcrisis habitacional\b',
-    r'\bbanco de suelo(?:s)? minvu\b',
-    r'\bcomit[ée]s? de vivienda\b',
-    r'\bcomit[ée]s? de allegados\b',
-    r'\bsocav[óo]n(?:es)?\b',
-    r'\bedificio kandinsky\b',
-    r'\beuromarina\b',
-    r'\bmiramar re[ñn]aca\b',
-    r'\bdunas de conc[óo]n\b',
-    r'\bcampo dunar de conc[óo]n\b',
-    r'\b(toma de terreno|tomas de terreno|toma ilegal|tomas ilegales|megatoma|megatomas|toma nuevo amanecer|toma dignidad|desalojo de toma)\b',
-    r'\bcampamento manuel bustos\b',
-    r'\balto molle\b',
-    r'\bel boro\b',
-    r'\bloteo(?:s)? brujo(?:s)?\b',
-    r'\bcaso convenios\b',
-    r'\bdemocracia viva\b',
-    r'\bprocultura\b',
-    r'\burbanismo social\b'
+PATRONES_VIVIENDA_CHILE = [
+    # 1. Conceptos nucleares de vivienda y habitabilidad
+    r'vivienda(?:s)?',
+    r'habitacional(?:es)?',
+    r'soluci[óo]n(?:es)? habitacional(?:es)?',
+    r'conjunto(?:s)? habitacional(?:es)?',
+    r'casa(?:s)? propia(?:s)?',
+    r'departamento(?:s)? social(?:es)?',
+    
+    # 2. Instituciones y Autoridades
+    r'minvu',
+    r'serviu',
+    r'servius',
+    r'ministerio de vivienda',
+    r'subsecretar[íi]a de vivienda',
+    r'seremi (?:de )?vivienda',
+    r'seremis (?:de )?vivienda',
+    r'seremi minvu',
+    r'iv[áa]n poduje',
+    r'ministro poduje',
+    r'poduje',
+    r'natalia aguilar',
+    r'subsecretaria aguilar',
+    r'parquemet',
+    r'parque metropolitano',
+    r'ditec', r'ddu', r'dph',
+    
+    # 3. Subsidios, Créditos y Programas
+    r'subsidio(?:s)?',
+    r'ds49', r'ds 49',
+    r'ds19', r'ds 19',
+    r'ds1', r'ds 1',
+    r'ds52', r'ds 52',
+    r'ds10', r'ds 10',
+    r'ds27', r'ds 27',
+    r'cr[ée]dito(?:s)? hipotecario(?:s)?',
+    r'tasa(?:s)? hipotecaria(?:s)?',
+    r'dividendo(?:s)?',
+    r'banco de suelo(?:s)?',
+    r'postulaci[óo]n (?:al )?subsidio',
+    r'postulaciones (?:al )?subsidio',
+    r'llamado a postular',
+    r'fogaes',
+    
+    # 4. Crisis, Déficit, Comités y Arriendos
+    r'd[ée]ficit habitacional',
+    r'crisis habitacional',
+    r'emergencia habitacional',
+    r'plan (?:de )?emergencia habitacional',
+    r'comit[ée]s? de vivienda',
+    r'comit[ée]s? de allegados',
+    r'allegado(?:s)?',
+    r'deudores habitacionales',
+    r'arriendo(?:s)?',
+    r'arrendatario(?:s)?',
+    r'arrendador(?:es)?',
+    r'precio(?:s)? de arriendo',
+    r'alquiler(?:es)?',
+    
+    # 5. Campamentos, Tomas, Desalojos y Suelo
+    r'campamento(?:s)?',
+    r'asentamiento(?:s)? precario(?:s)?',
+    r'toma(?:s)? de terreno(?:s)?',
+    r'toma(?:s)? ilegal(?:es)?',
+    r'megatoma(?:s)?',
+    r'desalojo(?:s)?',
+    r'usurpaci[óo]n (?:de )?terreno(?:s)?',
+    r'ocupaci[óo]n(?:es)? (?:ilegal(?:es)?|de terreno(?:s)?)',
+    r'terreno(?:s)? fiscal(?:es)?',
+    r'terreno(?:s)? municipal(?:es)?',
+    r'loteo(?:s)? brujo(?:s)?',
+    r'loteo(?:s)? irregular(?:es)?',
+    r'estafa(?:s)? inmobiliaria(?:s)?',
+    r'catastro de campamentos',
+    r'techo(?:-chile)?',
+    r'd[ée]ficit cero',
+    r'ukamau',
+    
+    # 6. Catástrofes, Socavones y Reconstrucción
+    r'socav[óo]n(?:es)?',
+    r'edificio kandinsky',
+    r'euromarina',
+    r'miramar re[ñn]aca',
+    r'dunas de conc[óo]n',
+    r'campo dunar',
+    r'reconstrucci[óo]n',
+    r'vivienda(?:s)? de emergencia',
+    r'damnificado(?:s)?',
+    r'suelos salinos',
+    r'falla estructural',
+    
+    # 7. Industria de la Construcción y Ciudad
+    r'cchc',
+    r'c[áa]mara chilena de la construcci[óo]n',
+    r'quiebra(?:s)? de constructora(?:s)?',
+    r'paralizaci[óo]n de obras',
+    r'permisolog[íi]a',
+    r'permiso(?:s)? de edificaci[óo]n',
+    r'plan regulador',
+    r'guetos verticales',
+    r'quiero mi barrio',
+    r'pavimentaci[óo]n participativa',
+    
+    # 8. Caso Convenios
+    r'caso convenios',
+    r'democracia viva',
+    r'procultura',
+    r'urbanismo social'
 ]
+
+# Países y ciudades foráneas para descarte inmediato (salvo mención explícita a MINVU/SERVIU/Poduje)
+
 
 
 MARCADORES_EXCLUSION_ARGENTINA = [
@@ -383,7 +447,7 @@ def es_noticia_estricta_minvu(titulo, bajada, cuerpo, url=""):
             if not any(re.search(pat, t_full) for pat in [r'\bminvu\b', r'\bserviu\b', r'\bpoduje\b', r'\bseremi\b']):
                 return False
 
-    for patron in ANCLAS_INVIOLABLES_MINVU:
+    for patron in PATRONES_VIVIENDA_CHILE:
         if re.search(patron, t_full):
             return True
 
